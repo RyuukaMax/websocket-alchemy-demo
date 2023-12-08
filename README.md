@@ -2,12 +2,12 @@
 Flutter Mobile App with Real-Time WebSocket Integration
 
 ## Objective
-To build a simple Flutter mobile app that consumes a WebSocket (wss://eth-mainnet.ws.alchemyapi.io/ws/demo) and demonstrates effective state management to display real-time data on a dedicated page.
+To build a simple Flutter mobile app that consumes a WebSocket (`wss://eth-mainnet.ws.alchemyapi.io/ws/demo`) and demonstrates effective state management to display real-time data on a dedicated page.
 
 ## Requirements
 ### 1. WebSocket Integration
 - Integrate the WebSocket connection with wss://eth-mainnet.ws.alchemyapi.io/ws/demo. (https://ethereum.org/en/developers/tutorials/using-websockets/)
-- Subscribe to “alchemy_newFullPendingTransactions”
+- Subscribe to `alchemy_newFullPendingTransactions`
 - Establish a secure and reliable connection to receive real-time data.
 
 ### 2.  State Management:
@@ -40,4 +40,4 @@ To build a simple Flutter mobile app that consumes a WebSocket (wss://eth-mainne
 - Adherence to Flutter coding standards and best practices.
 
 ## Submission
-Please upload your work into your Github private repository, and add “sterlingtechnologies” into Collaborators.
+Please upload your work into your Github private repository, and add `sterlingtechnologies` into Collaborators.
