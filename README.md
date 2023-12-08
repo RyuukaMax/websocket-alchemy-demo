@@ -38,5 +38,5 @@ To build a simple Flutter mobile app that consumes a WebSocket (wss://eth-mainne
     • Proper error handling for WebSocket connection issues.
     • Adherence to Flutter coding standards and best practices.
 
-## Subbmission
+## Submission
 Please upload your work into your Github private repository, and add “sterlingtechnologies” into Collaborators.
