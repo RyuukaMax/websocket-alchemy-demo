@@ -1,16 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:websocket_alchemy_demo/home/models/transaction.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:websocket_alchemy_demo/subscribe/models/models.dart';
 
-part 'alchemy_event.dart';
-part 'alchemy_state.dart';
+part 'subscribe_alchemy_event.dart';
+part 'subscribe_alchemy_state.dart';
 
-class AlchemyBloc extends Bloc<AlchemyEvent, AlchemyState> {
-  AlchemyBloc() : super(AlchemyInitial()) {
+class SubscribeAlchemyBloc
+    extends Bloc<SubscribeAlchemyEvent, SubscribeAlchemyState> {
+  SubscribeAlchemyBloc() : super(AlchemyInitial()) {
     on<AddTransaction>(_onAddTransaction);
   }
 
   int counter = 0;
+  late final WebSocketChannel channel;
 
   _onAddTransaction(event, emit) async {
     emit(AlchemyLoading(
@@ -33,8 +36,14 @@ class AlchemyBloc extends Bloc<AlchemyEvent, AlchemyState> {
     });
   }
 
+  _onSubscribe() {
+    emit(AlchemyLoading(
+      state.transactions,
+    ));
+  }
+
   @override
-  void onChange(Change<AlchemyState> change) {
+  void onChange(Change<SubscribeAlchemyState> change) {
     super.onChange(change);
     // ignore: avoid_print
     print(change);

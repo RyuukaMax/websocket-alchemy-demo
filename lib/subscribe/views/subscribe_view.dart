@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hooked_bloc/hooked_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:websocket_alchemy_demo/home/bloc/alchemy_bloc.dart';
+import 'package:websocket_alchemy_demo/subscribe/bloc/bloc.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class SubscribeView extends StatelessWidget {
+  const SubscribeView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AlchemyBloc(),
-      child: const _Home(),
+      create: (_) => SubscribeAlchemyBloc(),
+      child: const _SubscribeView(),
     );
   }
 }
 
-class _Home extends HookWidget {
-  const _Home();
+class _SubscribeView extends HookWidget {
+  const _SubscribeView();
 
   @override
   Widget build(BuildContext context) {
-    final bloc = useBloc<AlchemyBloc>();
+    final bloc = useBloc<SubscribeAlchemyBloc>();
     final state = useBlocBuilder(
       bloc,
     );

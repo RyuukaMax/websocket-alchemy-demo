@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:hooked_bloc/hooked_bloc.dart';
-
-import 'home/home.dart';
+import 'package:websocket_alchemy_demo/subscribe/subscribe.dart';
 
 void main() async {
   runApp(const WebSocketAlchemyDemo());
@@ -18,7 +16,7 @@ class WebSocketAlchemyDemo extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Home(),
+      home: const SubscribeView(),
     );
   }
 }
