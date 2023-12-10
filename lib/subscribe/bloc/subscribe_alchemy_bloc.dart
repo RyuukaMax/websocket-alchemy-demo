@@ -9,18 +9,26 @@ import 'package:websocket_alchemy_demo/subscribe/models/models.dart';
 part 'subscribe_alchemy_event.dart';
 part 'subscribe_alchemy_state.dart';
 
+const reconnectMaxAttempts = 5;
+const reconnectDelay = 3;
+
 class SubscribeAlchemyBloc
     extends Bloc<SubscribeAlchemyEvent, SubscribeAlchemyState> {
   SubscribeAlchemyBloc()
       : _repository = TransactionRepository(),
         super(DataInit()) {
-    on<StartSubscribe>(_startSubscription);
-    on<ProcessTransaction>(_processNewTransaction);
-    on<ProcessError>(_onSubscriptionError);
+    on<ProcessTransaction>(
+      (event, emit) => emit(DataStreaming(event.transaction)),
+    );
+    on<ProcessError>(
+      (event, emit) => emit(DataError(event.errMsg)),
+    );
     on<ReconnectSubscription>(
-        (event, emit) => emit(DataStreaming(state.transaction, event.msg)));
+      (event, emit) => emit(DataStreaming(state.transaction, event.msg)),
+    );
+    on<StartSubscribe>(_startSubscription);
     on<CloseSubscribe>(_closeSubscription);
-    on<ResetState>(_resetState);
+    on<ResetState>((_, emit) => emit(DataInit()));
   }
 
   int counter = 0;
@@ -49,17 +57,11 @@ class SubscribeAlchemyBloc
     }
   }
 
-  _processNewTransaction(event, emit) {
-    if (event is ProcessTransaction) {
-      emit(DataStreaming(event.transaction));
-    }
-  }
-
   _attemptReconnection() async {
     int attempt = 1;
     bool isConnectionAlive = false;
     late Stream<Transaction?> getStream;
-    while (attempt <= 5 && !isConnectionAlive) {
+    while (attempt <= reconnectMaxAttempts && !isConnectionAlive) {
       debugPrint('Connection lost! Reconnecting - Attempt $attempt');
       add(ReconnectSubscription(
           msg: 'Connection lost! Reconnecting - Attempt $attempt'));
@@ -67,7 +69,7 @@ class SubscribeAlchemyBloc
         getStream = await _repository.attemptSubscribe();
         isConnectionAlive = true;
       } catch (_) {
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: reconnectDelay));
         attempt++;
       }
     }
@@ -79,22 +81,12 @@ class SubscribeAlchemyBloc
     }
   }
 
-  _onSubscriptionError(event, emit) {
-    if (event is ProcessError) {
-      emit(DataError(event.errMsg));
-    }
-  }
-
-  _resetState(event, emit) {
-    emit(DataInit());
-  }
-
   _closeSubscription(event, emit) async {
-    await _closeConnection(emit);
-    _resetState(event, emit);
+    await _closeConnection();
+    add(ResetState());
   }
 
-  _closeConnection([emit]) async {
+  _closeConnection() async {
     try {
       await _transactionSubscription.cancel();
       await _repository.closeConnection();
