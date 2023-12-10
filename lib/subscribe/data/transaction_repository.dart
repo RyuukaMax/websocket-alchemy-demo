@@ -1,40 +1,48 @@
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:web_socket_channel/web_socket_channel.dart';
-
-const String alchemyDemoUrl = 'wss://eth-mainnet.ws.alchemyapi.io/ws/demo';
+import 'package:websocket_alchemy_demo/subscribe/data/data.dart';
+import 'package:websocket_alchemy_demo/subscribe/models/models.dart';
 
 class TransactionRepository {
-  late WebSocketChannel _channel;
+  TransactionRepository() : dataLayerWs = TransactionData();
 
-  Future<Stream<dynamic>> subscribeTransactions() async {
+  final TransactionData dataLayerWs;
+
+  Future<Stream<Transaction?>> attemptSubscribe() async {
     try {
-      _channel = WebSocketChannel.connect(
-        Uri.parse(alchemyDemoUrl),
-      );
-      print('Connecting to the socket...');
-
-      // Future.any([]);
-      await _channel.ready;
-      print('Connection ready!');
-
-      Map<String, dynamic> request = {
-        'jsonrpc': '2.0',
-        'id': 0,
-        'method': 'eth_subscribe',
-        'params': ['alchemy_newFullPendingTransactions']
-      };
-      _channel.sink.add(json.encode(request));
-      print('Subscribed!');
-
-      return _channel.stream;
+      await dataLayerWs.wsConnect();
+      return dataLayerWs.wsSubscribe().map(_parseData);
     } catch (error) {
-      print('Error! ${error.toString()}');
-      throw Error();
+      rethrow;
     }
   }
 
-  close() {
-    _channel.sink.close();
+  Transaction? _parseData(data) {
+    try {
+      print('Unparsed Data: $data');
+      Map<String, dynamic> decodedData = jsonDecode(data);
+      if (decodedData.containsKey('error')) {
+        String errMsg = decodedData['error']['message'];
+        throw errMsg;
+      } else {
+        if (decodedData['params']?['result'] == null) {
+          print('Skip data');
+          return null; // Ignore broken data that does not reflect model
+        }
+        Transaction newTransaction = Transaction.fromJson(
+          decodedData['params']?['result'],
+        );
+
+        return newTransaction;
+      }
+    } catch (error) {
+      print('Error receiving data! ${error.toString()}');
+      rethrow;
+    }
+  }
+
+  Future<void> closeConnection() async {
+    await dataLayerWs.wsClose();
   }
 }
