@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 const String alchemyDemoUrl = 'wss://eth-mainnet.ws.alchemyapi.io/ws/demo';
@@ -18,7 +17,7 @@ class TransactionData {
       _channel = WebSocketChannel.connect(
         Uri.parse(alchemyDemoUrl),
       );
-      print('Connecting to the socket...');
+      debugPrint('Connecting to the socket...');
 
       await _channel!.ready.timeout(
         const Duration(seconds: 5),
@@ -28,16 +27,19 @@ class TransactionData {
           ),
         ),
       );
-      print('Connection ready!');
+      debugPrint('Connection ready!');
+    } on SocketException catch (error) {
+      debugPrint('Socket Exception Error! ${error.toString()}');
+      throw 'Fail to connect to server! Please ensure you have internet connection...';
     } on WebSocketException catch (error) {
-      print('Websocket Exception Error! ${error.toString()}');
-      throw Error();
+      debugPrint('Websocket Exception Error! ${error.toString()}');
+      throw error.toString();
     } on TimeoutException catch (error) {
-      print('Timeout Exception Error! ${error.toString()}');
-      throw Error();
+      debugPrint('Timeout Exception Error! ${error.toString()}');
+      throw error.toString();
     } catch (error, stacktrace) {
-      print('Error! ${error.toString()}');
-      print('Stacktrace: $stacktrace');
+      debugPrint('Error! ${error.toString()}');
+      debugPrint('Stacktrace: $stacktrace');
       throw error.toString();
     }
   }
@@ -55,12 +57,12 @@ class TransactionData {
         'params': [subscribeType],
       };
       _channel!.sink.add(json.encode(request));
-      print('Subscribed!');
+      debugPrint('Subscribed!');
 
       return _channel!.stream;
     } catch (error, stacktrace) {
-      print('Error! ${error.toString()}');
-      print('Stacktrace: $stacktrace');
+      debugPrint('Error! ${error.toString()}');
+      debugPrint('Stacktrace: $stacktrace');
       throw error.toString();
     }
   }
@@ -72,8 +74,8 @@ class TransactionData {
       }
       await _channel!.sink.close();
     } catch (error, stacktrace) {
-      print('Error! ${error.toString()}');
-      print('Stacktrace: $stacktrace');
+      debugPrint('Error! ${error.toString()}');
+      debugPrint('Stacktrace: $stacktrace');
       throw error.toString();
     }
   }

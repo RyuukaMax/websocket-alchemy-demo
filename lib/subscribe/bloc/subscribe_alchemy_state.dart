@@ -16,7 +16,15 @@ final class DataLoading extends SubscribeAlchemyState {
 }
 
 final class DataStreaming extends SubscribeAlchemyState {
-  const DataStreaming([super.transaction]);
+  const DataStreaming([
+    super.transaction,
+    this.msg,
+  ]);
+
+  final String? msg;
+
+  @override
+  List<Object> get props => [transaction?.hash ?? '', msg ?? ''];
 }
 
 final class DataError extends SubscribeAlchemyState {

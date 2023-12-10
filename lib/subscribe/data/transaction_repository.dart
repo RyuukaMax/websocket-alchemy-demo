@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:websocket_alchemy_demo/subscribe/data/data.dart';
 import 'package:websocket_alchemy_demo/subscribe/models/models.dart';
 
@@ -20,14 +21,14 @@ class TransactionRepository {
 
   Transaction? _parseData(data) {
     try {
-      print('Unparsed Data: $data');
+      // debugPrint('Unparsed Data: $data');
       Map<String, dynamic> decodedData = jsonDecode(data);
       if (decodedData.containsKey('error')) {
         String errMsg = decodedData['error']['message'];
         throw errMsg;
       } else {
         if (decodedData['params']?['result'] == null) {
-          print('Skip data');
+          debugPrint('Skip data');
           return null; // Ignore broken data that does not reflect model
         }
         Transaction newTransaction = Transaction.fromJson(
@@ -37,8 +38,7 @@ class TransactionRepository {
         return newTransaction;
       }
     } catch (error) {
-      print('Error receiving data! ${error.toString()}');
-      rethrow;
+      throw 'Error while parsing JSON:  ${error.toString()}';
     }
   }
 

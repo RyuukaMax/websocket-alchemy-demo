@@ -24,6 +24,7 @@ class _SubscribeView extends HookWidget {
     final bloc = useBloc<SubscribeAlchemyBloc>();
     final state = useBlocBuilder(bloc);
 
+    // Listener to produce snackbar for error or state alerting
     useBlocListener<SubscribeAlchemyBloc, SubscribeAlchemyState>(bloc,
         (bloc, state, context) {
       const duration = Duration(seconds: 3);
@@ -37,8 +38,19 @@ class _SubscribeView extends HookWidget {
           ),
         );
         Future.delayed(duration, () => bloc.add(ResetState()));
+      } else if (state is DataStreaming) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.msg!),
+            backgroundColor: Colors.blue,
+            duration: duration,
+          ),
+        );
       }
-    }, listenWhen: (state) => state is DataError);
+    },
+        listenWhen: (state) =>
+            state is DataError ||
+            (state is DataStreaming && state.msg != null));
 
     return Scaffold(
       appBar: AppBar(
