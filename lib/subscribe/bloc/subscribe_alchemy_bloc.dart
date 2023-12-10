@@ -36,6 +36,7 @@ class SubscribeAlchemyBloc
         onDone: () {
           print('Stream is done!');
         },
+        cancelOnError: true,
       );
 
       // Keep event alive in order to continue emit new state changes
@@ -46,22 +47,26 @@ class SubscribeAlchemyBloc
     }
   }
 
-  _closeSubscription(event, emit) async {
-    await _closeConnection();
-    _resetState(event, emit);
-  }
-
-  _closeConnection() async {
-    await _transactionSubscription.cancel();
-    await _repository.closeConnection();
-  }
-
   _onSubscriptionError(error, emit) {
     emit(DataError(error.toString()));
   }
 
   _resetState(event, emit) {
     emit(DataInit());
+  }
+
+  _closeSubscription(event, emit) async {
+    await _closeConnection(emit);
+    _resetState(event, emit);
+  }
+
+  _closeConnection([emit]) async {
+    try {
+      await _repository.closeConnection();
+      await _transactionSubscription.cancel();
+    } catch (error) {
+      _onSubscriptionError(error, emit);
+    }
   }
 
   @override

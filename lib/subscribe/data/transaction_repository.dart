@@ -43,6 +43,10 @@ class TransactionRepository {
   }
 
   Future<void> closeConnection() async {
-    await dataLayerWs.wsClose();
+    try {
+      await dataLayerWs.wsClose();
+    } catch (error) {
+      rethrow;
+    }
   }
 }
