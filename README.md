@@ -1,3 +1,10 @@
+## Demo
+| GIF Demo | Description |
+| --- | --- |
+| [web_socket_demo.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/eb927c39-35b8-426f-b38d-73faccb1c406) | Normal Usage |
+| [web_socket_demo_no_internet.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/947fb039-aa16-487a-bc5e-7fd5db2bb326) | No internet connection |
+| [web_socket_demo_reconnect.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/cda20e9d-301d-45b3-bc56-62f8fde3b9da) | Reconnect attempts |
+
 ## Case Study 
 Flutter Mobile App with Real-Time WebSocket Integration
 
@@ -38,3 +45,4 @@ To build a simple Flutter mobile app that consumes a WebSocket (`wss://eth-mainn
 - Real-time data display on a dedicated page with a well-designed UI.
 - Proper error handling for WebSocket connection issues.
 - Adherence to Flutter coding standards and best practices.
+
