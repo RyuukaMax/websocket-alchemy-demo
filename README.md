@@ -1,9 +1,11 @@
 ## Demo
 | GIF Demo | Description |
 | --- | --- |
-| [web_socket_demo.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/eb927c39-35b8-426f-b38d-73faccb1c406) | Normal Usage |
-| [web_socket_demo_no_internet.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/947fb039-aa16-487a-bc5e-7fd5db2bb326) | No internet connection |
-| [web_socket_demo_reconnect.webm](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/cda20e9d-301d-45b3-bc56-62f8fde3b9da) | Reconnect attempts |
+| ![web_socket_demo](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/a232d269-76a5-486b-b733-f59197d31e57) | Normal Usage |
+| ![web_socket_demo_no_internet](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/6157711d-6955-489d-a30a-ce3f266c8c62) | No internet connection |
+| ![ezgif com-resize](https://github.com/RyuukaMax/websocket-alchemy-demo/assets/6970887/748e45df-6ae1-49f5-a54c-83efa2dd020f) | Reconnect attempts |
+
+
 
 ## Case Study 
 Flutter Mobile App with Real-Time WebSocket Integration
