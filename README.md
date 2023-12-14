@@ -38,6 +38,3 @@ To build a simple Flutter mobile app that consumes a WebSocket (`wss://eth-mainn
 - Real-time data display on a dedicated page with a well-designed UI.
 - Proper error handling for WebSocket connection issues.
 - Adherence to Flutter coding standards and best practices.
-
-## Submission
-Please upload your work into your Github private repository, and add `sterlingtechnologies` into Collaborators.
